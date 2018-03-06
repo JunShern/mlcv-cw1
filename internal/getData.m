@@ -7,7 +7,7 @@ function [ data_train, data_query ] = getData( MODE )
 %   3. Toy_Circle
 %   4. Caltech 101
 
-showImg = 1; % Show training & testing images and their image feature vector (histogram representation)
+showImg = 0; % Show training & testing images and their image feature vector (histogram representation)
 
 PHOW_Sizes = [4 8 10]; % Multi-resolution, these values determine the scale of each layer.
 PHOW_Step = 8; % The lower the denser. Select from {2,4,8,16}
@@ -124,12 +124,22 @@ switch MODE
         
         % K-means clustering
         numBins = 256; % for instance,
+        [cluster_indices, cluster_centers] = kmeans(desc_sel', numBins);
         
+        % data_train will have 150 rows of 257 vectors ([256-long codebooks, label])
+        data_train = zeros(length(classList)*length(imgIdx_tr), numBins + 1);
+        for c = 1:length(classList)
+            for i = 1:length(imgIdx_tr)
+                % Get nearest cluster centers
+                image_data_desc = desc_tr{c,i}';
+                nearest_cluster_indices = knnsearch(cluster_centers, image_data_desc);
+                
+                % Get histogram codebook
+                [codebook, codebook_labels] = hist(nearest_cluster_indices, 1:numBins);
+                data_train( (c-1)*length(imgIdx_tr) + i, : ) = [codebook, c];
+            end
+        end
         
-        % write your own codes here
-        % ...
-            
-       
         disp('Encoding Images...')
         % Vector Quantisation
         
@@ -173,13 +183,26 @@ switch MODE
             
             end
         end
-        suptitle('Testing image samples');
-                if showImg
-            figure('Units','normalized','Position',[.5 .1 .4 .9]);
-        suptitle('Testing image representations: 256-D histograms');
-        end
-
+%         suptitle('Testing image samples');
+%                 if showImg
+%             figure('Units','normalized','Position',[.5 .1 .4 .9]);
+%         suptitle('Testing image representations: 256-D histograms');
+%         end
+        
         % Quantisation
+        % data_test will have 150 rows of 257 vectors ([256-long codebooks, label])
+        data_query = zeros(length(classList)*length(imgIdx_te), numBins + 1);
+        for c = 1:length(classList)
+            for i = 1:length(imgIdx_te)
+                % Find nearest cluster center for image desc vector
+                image_data_desc = desc_te{c,i}';
+                nearest_cluster_indices = knnsearch(cluster_centers, image_data_desc);
+                
+                % Get histogram codebook
+                [codebook, codebook_labels] = hist(nearest_cluster_indices, 1:numBins);
+                data_query( (c-1)*length(imgIdx_te) + i, : ) = [codebook, c];
+            end
+        end
         
         % write your own codes here
         % ...

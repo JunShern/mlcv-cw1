@@ -5,8 +5,11 @@ subplot(2,2,1);
 if (length(dim)==1)
     if dim == 1
         plot([t t],[r(1),r(2)],'r');
-    else
+    elseif dim == 2
         plot([r(1),r(2)],[t t],'r');
+    % Two-pixel test
+    elseif dim == -1
+        plot([r(1)+t,r(2)+t],[r(1),r(2)],'r');
     end
 else
     if(length(dim)==2)
@@ -39,8 +42,7 @@ else
         h=ezplot(str,[-1.5 1.5 -1.5 1.5]);
         h.LineWidth=2.5;
         h.LineColor='r';
-        title(sprintf('Cubic: IG = %4.2f',ig_best),'FontSize', 20);
-    
+        title(sprintf('Quad: IG = %4.2f',ig_best),'FontSize', 20);
     end
 end
 
@@ -55,8 +57,6 @@ hold on;
 plot(data(data(:,end)==2,1), data(data(:,end)==2,2), 'o', 'MarkerFaceColor', [.3 .9 .3], 'MarkerEdgeColor','k');
 hold on;
 plot(data(data(:,end)==3,1), data(data(:,end)==3,2), 'o', 'MarkerFaceColor', [.3 .3 .9], 'MarkerEdgeColor','k');
-% Title of graph
-%title(sprintf('Axis-aligned Split, IG = %4,2f', ig_best));
 
 % if ~iter
 %     title(sprintf('BEST Split [%i]. IG = %4.2f',dim,ig_best));
@@ -71,14 +71,14 @@ subplot(2,2,2);
 tmp = hist(data(:,end), unique(data(:,end)));
 bar(tmp);
 axis([0.5 3.5 0 max(tmp)]);
-title('Parent node');
+title('Class histogram of parent node');
 subplot(2,2,3);
 bar(hist(data(idx_best,end), unique(data(:,end))));
 axis([0.5 3.5 0 max(tmp)]);
-title('Left node');
+title('Class histogram of left child node');
 subplot(2,2,4);
 bar(hist(data(~idx_best,end), unique(data(:,end))));
 axis([0.5 3.5 0 max(tmp)]);
-title('Right node');
+title('Class histogram of right child node');
 hold off;
 end

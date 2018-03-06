@@ -1,7 +1,7 @@
 function [node,nodeL,nodeR] = splitNode(data,node,param)
 % Split node
 
-visualise = 1;
+visualise = 0;
 
 % Initilise child nodes
 iter = param.splitNum;
@@ -22,10 +22,11 @@ idx_best = [];
 for n = 1:iter
     
     % Split function - Modify here and try other types of split function
-     [idx_, dim, t] = splitAxisAligned(data, D);
+    [idx_, dim, t] = splitAxisAligned(data, D);
 %     [idx_, dim, t] = splitLinear(data);
 %     [idx_, dim, t] = splitQuadratic(data);
 %     [idx_, dim, t] = splitCubic(data);
+%     [idx_, dim, t] = splitTwoPixel(D, data);
     
     ig = getIG(data,idx_); % Calculate information gain
     
@@ -35,7 +36,7 @@ for n = 1:iter
     end
     
     if (sum(idx_) > 0 & sum(~idx_) > 0) % We check that children node are not empty
-    [node, ig_best, idx_best] = updateIG(node,ig_best,ig,t,idx_,dim,idx_best);
+        [node, ig_best, idx_best] = updateIG(node,ig_best,ig,t,idx_,dim,idx_best);
     end
     
 end
@@ -151,6 +152,24 @@ function [idx_, dim, t] = splitCubic( data )
     % Pick a random value within the range as threshold
     idx_ = non_linear_feat*dim < t;
 
+end
+
+function [idx_, dim, t] = splitTwoPixel( D, data )
+
+    dim = randperm(D-1);
+    d_min = single(min(data(:,dim(1)) - data(:,dim(2)))) + eps;
+    d_max = single(max(data(:,dim(1)) - data(:,dim(2)))) - eps;
+    
+    % Pick a random value within the range as threshold
+    t = d_min + rand*((d_max-d_min));
+    idx_ = (data(:,dim(1)) - data(:,dim(2))) < t;
+    
+    if (dim(1) == 1) % x - y < t
+        t = t;
+    else % y - x < t
+        t = -t;
+    end
+    dim = -1; % Special flag for two-pixel test visualization
 end
 
 function ig = getIG(data,idx) % Information Gain - the 'purity' of data labels in both child nodes after split. The higher the purer.
