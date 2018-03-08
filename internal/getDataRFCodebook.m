@@ -130,9 +130,9 @@ switch MODE
         % RF codebook
         
         % Set the random forest parameters for instance, 
-        param.num = 10;         % Number of trees
-        param.depth = 5;        % trees depth
-        param.splitNum = 3;     % Number of split functions to try
+        param.num = 50;         % Number of trees
+        param.depth = 7;        % trees depth
+        param.splitNum = 5;     % Number of split functions to try
         param.split = 'IG';     % Currently support 'information gain' only
         %%%%%%%%%%%%%%%%%%%%%%
         % Train Random Forest

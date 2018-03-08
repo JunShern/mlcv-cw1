@@ -68,6 +68,28 @@ param.split = 'IG';     % Currently support 'information gain' only
 % Grow all trees
 trees = growTrees(data_train,param);
 
+%% Visualize class distributions of leaf nodes
+figure('pos', [100,200,1200,300]);
+subplot(1,4,1);
+bar(trees(1).leaf(1).prob);
+axis([0.5 3.5 0 1]);
+title('Class histogram of leaf 1, tree 1','FontSize', 10);
+
+subplot(1,4,2);
+bar(trees(1).leaf(3).prob);
+axis([0.5 3.5 0 1]);
+title('Class histogram of leaf 3, tree 1','FontSize', 10);
+
+subplot(1,4,3);
+bar(trees(1).leaf(5).prob);
+axis([0.5 3.5 0 1]);
+title('Class histogram of leaf 5, tree 1','FontSize', 10);
+
+subplot(1,4,4);
+bar(trees(1).leaf(7).prob);
+axis([0.5 3.5 0 1]);
+title('Class histogram of leaf 7, tree 1','FontSize', 10);
+
 %%
 %%%%%%%%%%%%%%%%%%%%%%
 % Evaluate/Test Random Forest
@@ -191,8 +213,8 @@ title(sprintf('Confusion matrix (%.2f %% accuracy)', 100 * accuracy_rf) ) ;
 [data_train, data_test] = getDataRFCodebook('Caltech');
 
 %% RF classifier on RF codebook
-param.num = 200;         % Number of trees
-param.depth = 20;        % trees depth
+param.num = 50;         % Number of trees
+param.depth = 5;        % trees depth
 param.splitNum = 5;     % Number of split functions to try
 param.split = 'IG';     % Currently support 'information gain' only
 trees = growTrees(data_train,param);
