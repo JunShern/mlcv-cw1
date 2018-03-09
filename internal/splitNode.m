@@ -22,11 +22,11 @@ idx_best = [];
 for n = 1:iter
     
     % Split function - Modify here and try other types of split function
-%     [idx_, dim, t] = splitAxisAligned(data, D);
-%     [idx_, dim, t] = splitLinear(data);
-%     [idx_, dim, t] = splitQuadratic(data);
-    [idx_, dim, t] = splitCubic(data);
-%     [idx_, dim, t] = splitTwoPixel(D, data);
+%  [idx_, dim, t] = splitAxisAligned(data, D);
+%  [idx_, dim, t] = splitLinear(data);
+%  [idx_, dim, t] = splitQuadratic(data);
+  [idx_, dim, t] = splitCubic(data);
+%  [idx_, dim, t] = splitTwoPixel(D, data);
     
     ig = getIG(data,idx_); % Calculate information gain
     
