@@ -93,6 +93,7 @@ for t_ind = 1:length(num_trees_range)
         % v = horzcat(data_test(:,end), predicted_labels(:,1), data_test(:,end) == predicted_labels(:,1));
     end
 end
+save('3_kmeans_numtrees.mat','accuracy_results_numtrees','train_time_numtrees','test_time_numtrees');
 
 %% PLOTTING FOR VARYING NUM TREES 
 figure;
@@ -184,6 +185,8 @@ for t_ind = 1:length(depth_range)
     end
 end
 
+save('3_kmeans_depth.mat','accuracy_results_depth','train_time_depth','test_time_depth');
+
 %% PLOTTING FOR VARYING DEPTH
 figure;
 for count = 1:length(depth_range)
@@ -273,8 +276,9 @@ for t_ind = 1:length(splitnum_range)
         % v = horzcat(data_test(:,end), predicted_labels(:,1), data_test(:,end) == predicted_labels(:,1));
     end
 end
+save('3_kmeans_splitnum.mat','accuracy_results_splitnum','train_time_splitnum','test_time_splitnum');
 
-%% PLOTTING FOR VARYING DEPTH
+%% PLOTTING FOR VARYING SPLITNUM
 figure;
 for count = 1:length(splitnum_range)
     plot(k_range, accuracy_results_splitnum(count,:));
