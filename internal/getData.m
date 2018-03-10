@@ -1,4 +1,4 @@
-function [ data_train, data_query ] = getData( MODE )
+function [ data_train, data_query ] = getData( MODE, num_clusters )
 % Generate training and testing data
 
 % Data Options:
@@ -82,7 +82,7 @@ switch MODE
         imgSel = [15 15]; % randomly select 15 images each class without replacement. (For both training & testing)
         folderName = './Caltech_101/101_ObjectCategories';
         classList = dir(folderName);
-        classList = {classList(3:end).name} % 10 classes
+        classList = {classList(3:end).name}; % 10 classes
         
         disp('Loading training images...')
         % Load Images -> Description (Dense SIFT)
@@ -123,7 +123,7 @@ switch MODE
         desc_sel = single(vl_colsubset(cat(2,desc_tr{:}), 10e4)); % Randomly select 100k SIFT descriptors for clustering
         
         % K-means clustering
-        numBins = 256; % for instance,
+        numBins = num_clusters; % for instance, 256
         [cluster_indices, cluster_centers] = kmeans(desc_sel', numBins);
         
         % data_train will have 150 rows of 257 vectors ([256-long codebooks, label])

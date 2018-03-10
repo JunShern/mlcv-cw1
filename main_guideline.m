@@ -140,9 +140,9 @@ init;
 % Select dataset
 % we do bag-of-words technique to convert images to vectors (histogram of codewords)
 % Set 'showImg' in getData.m to 0 to stop displaying training and testing images and their feature vectors
-[data_train_not_norm, data_test_not_norm] = getData('Caltech');
 
-%% 
+[data_train_not_norm, data_test_not_norm] = getData('Caltech', 256);
+
 % Normalize histograms to be between 0 and 1
 data_train = data_train_not_norm;
 data_test = data_test_not_norm;
