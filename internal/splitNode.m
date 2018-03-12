@@ -22,12 +22,18 @@ idx_best = [];
 for n = 1:iter
     
     % Split function - Modify here and try other types of split function
- [idx_, dim, t] = splitAxisAligned(data, D);
-%  [idx_, dim, t] = splitLinear(data);
-%  [idx_, dim, t] = splitQuadratic(data);
-%   [idx_, dim, t] = splitCubic(data);
-%  [idx_, dim, t] = splitTwoPixel(D, data);
-    
+    if param.splitfunc == "axisaligned"
+        [idx_, dim, t] = splitAxisAligned(data, D);
+    elseif param.splitfunc == "twopixel"
+        [idx_, dim, t] = splitTwoPixel(data, D);
+    else
+        [idx_, dim, t] = splitAxisAligned(data, D);
+    %  [idx_, dim, t] = splitLinear(data);
+    %  [idx_, dim, t] = splitQuadratic(data);
+    %   [idx_, dim, t] = splitCubic(data);
+    %  [idx_, dim, t] = splitTwoPixel(D, data);
+    end
+
     ig = getIG(data,idx_); % Calculate information gain
     
     if visualise
@@ -154,8 +160,7 @@ function [idx_, dim, t] = splitCubic( data )
 
 end
 
-function [idx_, dim, t] = splitTwoPixel( D, data )
-
+function [idx_, dim, t] = splitTwoPixel( data, D )
     dim = randperm(D-1);
     d_min = single(min(data(:,dim(1)) - data(:,dim(2)))) + eps;
     d_max = single(max(data(:,dim(1)) - data(:,dim(2)))) - eps;
@@ -169,7 +174,7 @@ function [idx_, dim, t] = splitTwoPixel( D, data )
     else % y - x < t
         t = -t;
     end
-    dim = -1; % Special flag for two-pixel test visualization
+    %dim = -1; % Special flag for two-pixel test visualization
 end
 
 function ig = getIG(data,idx) % Information Gain - the 'purity' of data labels in both child nodes after split. The higher the purer.

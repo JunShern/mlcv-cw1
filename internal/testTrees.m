@@ -10,12 +10,21 @@ for T = 1:length(tree)
             t = tree(T).node(idx).t;
             dim = tree(T).node(idx).dim;
             % Decision
-            if data(m,dim) < t % Pass data to left node
-                idx = idx*2;
+            if numel(dim)==1 
+                % Axis-aligned
+                if data(m,dim) < t % Pass data to left node
+                    idx = idx*2;
+                else
+                    idx = idx*2+1; % and to right
+                end
             else
-                idx = idx*2+1; % and to right
+                % Two-pixel test
+                if (data(:,dim(1)) - data(:,dim(2))) < t
+                   idx = idx*2;
+                else
+                    idx = idx*2+1; % and to right
+                end 
             end
-            
         end
         leaf_idx = tree(T).node(idx).leaf_idx;
         
