@@ -3,8 +3,8 @@ init;
 
 %% RF Codebook
 % Iterate num trees and depth
-range_num_trees = [8,32,64,128];
-range_depth = [2,4,8,12];
+range_num_trees = [5,10,20,40,80];
+range_depth = [2,4,6];
 
 build_time = zeros(length(range_depth), length(range_num_trees));
 accuracy_array = zeros(length(range_depth), length(range_num_trees));
@@ -53,7 +53,7 @@ parfor ind_depth = 1:length(range_depth)
     accuracy_array(ind_depth,:) = accuracy_array_row
 end
 
-save('rf_codebook_results.m', 'build_time', 'accuracy_array');
+save('rf_codebook_results_smaller.m', 'build_time', 'accuracy_array');
 
 %%
 % Iterate split num and split func
